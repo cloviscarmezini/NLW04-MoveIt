@@ -6,6 +6,7 @@ import { Countdown } from "../components/Countdown";
 import { ExperienceBar } from "../components/ExperienceBar";
 import { Profile } from "../components/Profile";
 import { ChallengeBox } from "../components/ChallengeBox";
+import { AuthModal } from "../components/AuthModal";
 
 import styles from '../styles/pages/Home.module.css';
 import { CountdownProvider } from '../contexts/CountdownContext';
@@ -21,12 +22,12 @@ export default function Home({
   level,
   currentExperience,
   challengesCompleted
-}:HomeProps) {
+}: HomeProps) {
 
   return (
-    <ChallengesProvider 
+    <ChallengesProvider
       level={level}
-      currentExperience={currentExperience} 
+      currentExperience={currentExperience}
       challengesCompleted={challengesCompleted}
     >
       <div className={styles.container}>
@@ -34,17 +35,19 @@ export default function Home({
           <title>Início | move.it</title>
         </Head>
 
+        <AuthModal />
+
         <ExperienceBar />
 
         <CountdownProvider>
           <section>
             <div>
-              <Profile/>
-              <CompletedChallenges/>
-              <Countdown/>
+              <Profile />
+              <CompletedChallenges />
+              <Countdown />
             </div>
             <div>
-              <ChallengeBox/>
+              <ChallengeBox />
             </div>
           </section>
         </CountdownProvider>
