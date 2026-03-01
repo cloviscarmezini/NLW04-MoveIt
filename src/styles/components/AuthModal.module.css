@@ -105,3 +105,33 @@
 .toggleButton:hover {
   filter: brightness(0.8);
 }
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: #eeeeee;
+  border-style: dashed;
+  background-color: #fafafa;
+  color: #bdbdbd;
+  outline: none;
+  transition: border .24s ease-in-out;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.dropzone:focus {
+  border-color: #2196f3;
+}
+
+.dropzone img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}

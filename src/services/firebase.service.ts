@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAnalytics, Analytics, isSupported } from "firebase/analytics";
 import { getAuth, Auth, GoogleAuthProvider } from "firebase/auth";
+import { getStorage, FirebaseStorage } from "firebase/storage";
 
 interface IFirebaseConfig {
   apiKey: string;
@@ -16,6 +17,7 @@ class FirebaseService {
   private static instance: FirebaseService;
   private app: FirebaseApp;
   private auth: Auth;
+  private storage: FirebaseStorage;
   public googleProvider: GoogleAuthProvider;
   private analytics: Analytics | null = null;
 
@@ -38,6 +40,7 @@ class FirebaseService {
     }
 
     this.auth = getAuth(this.app);
+    this.storage = getStorage(this.app);
     this.googleProvider = new GoogleAuthProvider();
 
     if (typeof window !== "undefined") {
@@ -62,6 +65,10 @@ class FirebaseService {
 
   public getAuth(): Auth {
     return this.auth;
+  }
+
+  public getStorage(): FirebaseStorage {
+    return this.storage;
   }
 
   public getAnalytics(): Analytics | null {

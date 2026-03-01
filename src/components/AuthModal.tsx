@@ -1,5 +1,6 @@
-import { useState, useContext, FormEvent } from 'react';
-import { FaGoogle } from 'react-icons/fa';
+import { useState, useContext, FormEvent, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { FaGoogle, FaCamera } from 'react-icons/fa';
 import { AuthContext } from '../contexts/AuthContext';
 import styles from '../styles/components/AuthModal.module.css';
 
@@ -9,6 +10,22 @@ export function AuthModal() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isSignUp, setIsSignUp] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        const file = acceptedFiles[0];
+        setSelectedFile(file);
+        setPreview(URL.createObjectURL(file));
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png']
+        },
+        maxFiles: 1
+    });
 
     if (isLoading) {
         return null; // Or a loading spinner
@@ -24,7 +41,7 @@ export function AuthModal() {
 
         try {
             if (isSignUp) {
-                await signUpWithEmail(email, password);
+                await signUpWithEmail(email, password, selectedFile);
             } else {
                 await signInWithEmail(email, password);
             }
@@ -52,6 +69,24 @@ export function AuthModal() {
                 {error && <p style={{ color: 'red', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</p>}
 
                 <form onSubmit={handleAuth}>
+                    {isSignUp && (
+                        <div {...getRootProps()} className={styles.dropzone}>
+                            <input {...getInputProps()} />
+                            {preview ? (
+                                <img src={preview} alt="Preview" />
+                            ) : (
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                                    <FaCamera size={24} />
+                                    {isDragActive ? (
+                                        <p style={{ fontSize: '0.8rem', margin: 0 }}>Solte a imagem aqui...</p>
+                                    ) : (
+                                        <p style={{ fontSize: '0.8rem', margin: 0 }}>Arraste ou clique para adicionar foto (opcional)</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     <div className={styles.inputGroup}>
                         <label htmlFor="email">Email</label>
                         <input
